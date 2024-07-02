@@ -29,6 +29,8 @@ class BeritaMainPage extends StatelessWidget {
             ),
           ],
           bottom: const TabBar(
+            indicatorColor: Colors.deepPurple,
+            // indicator: UnderlineTabIndicator(insets: EdgeInsets.all(5)),
             tabs: [
               Tab(text: 'Terbaru'),
               Tab(text: 'Lifestyle'),

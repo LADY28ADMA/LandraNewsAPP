@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:myapp/detailnews.dart';
 import 'package:myapp/service/api_service.dart';
 
@@ -67,6 +67,11 @@ class _BeritaPageState extends State<BeritaPage> {
 
   @override
   Widget build(BuildContext context) {
+    String formatTanggal(String dateString) {
+      DateTime dateTime = DateTime.parse(dateString);
+      return DateFormat('dd MMM yyyy').format(dateTime);
+    }
+
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshBerita,
@@ -81,26 +86,37 @@ class _BeritaPageState extends State<BeritaPage> {
               return const Center(child: Text('Tidak ada berita.'));
             } else {
               return ListView.builder(
+                // shrinkWrap: true,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final berita = snapshot.data![index];
                   return ListTile(
-                    title: Text(berita.judul),
-                    subtitle: Text(berita.created_at),
+                    title: Text(
+                      berita.judul.length > 20
+                          ? berita.judul.substring(0, 20) + "..."
+                          : berita.judul,
+                          style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      formatTanggal(berita.created_at),
+                      style: const TextStyle(
+                          fontSize: 11, fontWeight: FontWeight.w400),
+                    ),
                     leading: berita.media != null && berita.media!.isNotEmpty
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
                                 'https://demo.amoratours.id/${berita.media}',
                                 width: 100,
-                                height: 130,
-                                fit: BoxFit.fitHeight))
+                                height: 150,
+                                fit: BoxFit.cover))
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
                                 'https://media.istockphoto.com/id/1369150014/id/vektor/breaking-news-dengan-latar-belakang-peta-dunia-vektor.jpg?s=612x612&w=0&k=20&c=SpV6nFq1Zf7Gh7qPCESEP6h3eS4fdBc3IO71M5Of18Y=',
                                 width: 100,
-                                height: 130,
+                                height: 150,
                                 fit: BoxFit.cover)),
                     trailing: const Icon(Icons.read_more_outlined),
                     onTap: () {

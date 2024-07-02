@@ -63,9 +63,9 @@ class _MainPageState extends State<MainPage> {
         bottomBar: [
           BottomBarItem(
             icon: const Icon(Icons.home),
-            iconSelected: const Icon(Icons.home, color: Colors.red),
+            iconSelected: const Icon(Icons.home, color: Colors.deepPurple),
             title: 'Home',
-            dotColor: Colors.red,
+            dotColor: Colors.deepPurple,
             onTap: (value) {
               setState(() {
                 index = value;
@@ -74,9 +74,9 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomBarItem(
             icon: const Icon(Icons.settings),
-            iconSelected: const Icon(Icons.settings, color: Colors.red),
+            iconSelected: const Icon(Icons.settings, color: Colors.deepPurple),
             title: 'Settings',
-            dotColor: Colors.red,
+            dotColor: Colors.deepPurple,
             onTap: (value) {
               setState(() {
                 index = value;
@@ -85,7 +85,7 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         bottomBarCenterModel: BottomBarCenterModel(
-          centerBackgroundColor: Colors.red,
+          centerBackgroundColor: Colors.deepPurple,
           centerIcon: const FloatingCenterButton(
             child: Icon(
               Icons.add,

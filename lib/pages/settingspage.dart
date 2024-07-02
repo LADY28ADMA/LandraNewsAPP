@@ -51,13 +51,7 @@ class _SettingsPage2State extends State<SettingsPage2> {
                     _CustomListTile(
                         title: "Profile", icon: Icons.person_outline_rounded),
                     _CustomListTile(
-                        title: "Messaging", icon: Icons.message_outlined),
-                    _CustomListTile(
-                        title: "Calling", icon: Icons.phone_outlined),
-                    _CustomListTile(
-                        title: "People", icon: Icons.contacts_outlined),
-                    _CustomListTile(
-                        title: "Calendar", icon: Icons.calendar_today_rounded)
+                        title: "Messaging", icon: Icons.message_outlined)
                   ],
                 ),
                 const Divider(),
