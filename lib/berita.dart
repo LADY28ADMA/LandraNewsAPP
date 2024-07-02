@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:myapp/detailnews.dart';
+import 'package:myapp/service/api_service.dart';
 
 class Berita {
   final int id;
@@ -37,7 +38,9 @@ class Berita {
 }
 
 class BeritaPage extends StatefulWidget {
-  const BeritaPage({super.key});
+  final String endpoint;
+
+  const BeritaPage({required this.endpoint, super.key});
 
   @override
   State<BeritaPage> createState() => _BeritaPageState();
@@ -45,27 +48,17 @@ class BeritaPage extends StatefulWidget {
 
 class _BeritaPageState extends State<BeritaPage> {
   late Future<List<Berita>> _beritasFuture;
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    _beritasFuture = _fetchBerita();
-  }
-
-  Future<List<Berita>> _fetchBerita() async {
-    final res =
-        await http.get(Uri.parse('http://demo.amoratours.id/api/newss/feeds'));
-    if (res.statusCode == 200) {
-      final decodedData = jsonDecode(res.body) as List<dynamic>;
-      return decodedData.map((e) => Berita.fromJson(e)).toList();
-    } else {
-      throw Exception('Failed to load beritas');
-    }
+    _beritasFuture = apiService.fetchBerita(widget.endpoint);
   }
 
   Future<void> _refreshBerita() async {
     setState(() {
-      _beritasFuture = _fetchBerita();
+      _beritasFuture = apiService.fetchBerita(widget.endpoint);
     });
   }
 
@@ -78,9 +71,7 @@ class _BeritaPageState extends State<BeritaPage> {
           future: _beritasFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                  child:
-                      CircularProgressIndicator()); // Tampilkan loading spinner
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -93,8 +84,7 @@ class _BeritaPageState extends State<BeritaPage> {
                   return ListTile(
                     title: Text(berita.judul),
                     subtitle: Text(berita.isi),
-                    leading: Image.network(
-                        'https://demo.amoratours.id/${berita.media}'),
+                    leading: Image.network('https://demo.amoratours.id/${berita.media}'),
                     trailing: Text(berita.tag),
                     onTap: () {
                       Navigator.push(
