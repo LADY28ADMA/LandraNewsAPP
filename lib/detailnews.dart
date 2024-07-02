@@ -28,6 +28,11 @@ class DetailBeritaPage extends StatelessWidget {
                 height: 200, width: 200),
             SizedBox(height: 16),
             Text(berita.isi),
+            SizedBox(height: 16),
+            Text('Kategori: ${berita.kategori}'),
+            SizedBox(height: 16),
+            Text('Tag: ${berita.tag}'),
+            
           ],
         ),
       ),

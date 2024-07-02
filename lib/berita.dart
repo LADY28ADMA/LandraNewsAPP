@@ -49,7 +49,7 @@ class _BeritaPageState extends State<BeritaPage> {
   @override
   void initState() {
     super.initState();
-    _beritasFuture = _fetchBerita(); // Inisialisasi _beritasFuture di sini
+    _beritasFuture = _fetchBerita();
   }
 
   Future<List<Berita>> _fetchBerita() async {
@@ -63,47 +63,53 @@ class _BeritaPageState extends State<BeritaPage> {
     }
   }
 
+  Future<void> _refreshBerita() async {
+    setState(() {
+      _beritasFuture = _fetchBerita();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BRRREKING NEWS'),
-      ),
-      body: FutureBuilder<List<Berita>>(
-        future: _beritasFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child:
-                    CircularProgressIndicator()); // Tampilkan loading spinner
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Tidak ada berita.'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final berita = snapshot.data![index];
-                return ListTile(
-                  title: Text(berita.judul),
-                  subtitle: Text(berita.isi),
-                  leading: Image.network(
-                      'https://demo.amoratours.id/${berita.media}'),
-                  trailing: Text(berita.tag),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailBeritaPage(berita: berita),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          }
-        },
+      body: RefreshIndicator(
+        onRefresh: _refreshBerita,
+        child: FutureBuilder<List<Berita>>(
+          future: _beritasFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child:
+                      CircularProgressIndicator()); // Tampilkan loading spinner
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('Tidak ada berita.'));
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final berita = snapshot.data![index];
+                  return ListTile(
+                    title: Text(berita.judul),
+                    subtitle: Text(berita.isi),
+                    leading: Image.network(
+                        'https://demo.amoratours.id/${berita.media}'),
+                    trailing: Text(berita.tag),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailBeritaPage(berita: berita),
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }
