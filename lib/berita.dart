@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 import 'package:myapp/detailnews.dart';
 import 'package:myapp/service/api_service.dart';
@@ -12,7 +12,8 @@ class Berita {
   final String tag;
   final String isi;
   final String kategori;
-  final String media;
+  final String created_at;
+  final String? media;
 
   Berita({
     required this.id,
@@ -21,7 +22,8 @@ class Berita {
     required this.tag,
     required this.isi,
     required this.kategori,
-    required this.media,
+    required this.created_at,
+    this.media,
   });
 
   factory Berita.fromJson(Map<String, dynamic> json) {
@@ -32,7 +34,8 @@ class Berita {
       tag: json['tag'] as String,
       isi: json['isi'] as String,
       kategori: json['kategori'] as String,
-      media: json['media'] as String,
+      created_at: json['created_at'] as String,
+      media: json['media'] as String?,
     );
   }
 }
@@ -83,14 +86,29 @@ class _BeritaPageState extends State<BeritaPage> {
                   final berita = snapshot.data![index];
                   return ListTile(
                     title: Text(berita.judul),
-                    subtitle: Text(berita.isi),
-                    leading: Image.network('https://demo.amoratours.id/${berita.media}'),
-                    trailing: Text(berita.tag),
+                    subtitle: Text(berita.created_at),
+                    leading: berita.media != null && berita.media!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                                'https://demo.amoratours.id/${berita.media}',
+                                width: 100,
+                                height: 130,
+                                fit: BoxFit.fitHeight))
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                                'https://media.istockphoto.com/id/1369150014/id/vektor/breaking-news-dengan-latar-belakang-peta-dunia-vektor.jpg?s=612x612&w=0&k=20&c=SpV6nFq1Zf7Gh7qPCESEP6h3eS4fdBc3IO71M5Of18Y=',
+                                width: 100,
+                                height: 130,
+                                fit: BoxFit.cover)),
+                    trailing: const Icon(Icons.read_more_outlined),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailBeritaPage(berita: berita),
+                          builder: (context) =>
+                              DetailBeritaPage(berita: berita),
                         ),
                       );
                     },
