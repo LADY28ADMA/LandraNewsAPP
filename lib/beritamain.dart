@@ -40,7 +40,7 @@ class BeritaMainPage extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            BeritaPage(endpoint: 'http://demo.amoratours.id/api/newss/alfeeds',),
+            BeritaPage(endpoint: 'https://demo.amoratours.id/api/newss/alfeeds',),
             LifestylePage(),
             MorePage(),
           ],
