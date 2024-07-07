@@ -1,7 +1,14 @@
 # Flutter News APP
 
-A new Flutter project.
+# link api repo 
+```
+https://github.com/LADY28ADMA/LandraNewsBeritaAPI.git
+```
 
+# link demo api:
+```
+https://demo.amoratours.id
+```
 ## Getting Started
 
 This project is a starting point for a Flutter application.
